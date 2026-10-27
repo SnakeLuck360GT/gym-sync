@@ -2,7 +2,7 @@ const app = document.getElementById("app");
 
 const DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const DEFAULT_PREFS = { from: 9 * 60, to: 18 * 60, min: 30 };
+const DEFAULT_PREFS = { from: 9 * 60, to: 18 * 60, min: 120 };
 
 /* ---------- Dates, always in UK time ---------- */
 
@@ -533,14 +533,6 @@ function startGroup(id) {
         { class: "callout" },
         h("p", {}, members.length ? `Add your timetable to see when you're free with ${who}.` : "Add your timetable to get started."),
         h("button", { class: "button primary", type: "button", onclick: openAdd }, "Add my timetable"),
-      );
-    }
-    if (members.length === 1) {
-      return h(
-        "div",
-        { class: "callout" },
-        h("p", {}, "Send this link to your friends. Once they add their timetables, your shared free time shows up here."),
-        h("button", { class: "button primary", type: "button", onclick: share }, "Share link"),
       );
     }
     return null;
