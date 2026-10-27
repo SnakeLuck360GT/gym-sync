@@ -1,0 +1,16 @@
+[build]
+  publish = "public"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/g/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Referrer-Policy = "same-origin"
+    X-Content-Type-Options = "nosniff"

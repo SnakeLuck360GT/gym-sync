@@ -1,0 +1,13 @@
+{
+  "name": "frees",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx netlify-cli@27 dev",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^11.1.7",
+    "ical.js": "^2.2.1"
+  }
+}
