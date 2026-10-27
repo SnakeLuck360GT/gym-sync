@@ -506,6 +506,8 @@ function startGroup(id) {
           `${DAY_NAMES[weekday(event.day)]} ${dayOfMonth(event.day)} ${monthOf(event.day)}, ${time(event.start)}–${time(event.end)}`,
         ),
         event.location && h("div", { class: "row" }, h("span", { class: "row-label" }, "Where"), event.location),
+        (event.kind || event.code) &&
+          h("div", { class: "row" }, h("span", { class: "row-label" }, "What"), [event.kind, event.code].filter(Boolean).join(" · ")),
       ),
     );
   }

@@ -105,6 +105,37 @@ test("events crossing midnight are split", () => {
   ]);
 });
 
+test("Scientia descriptions give readable titles; asynchronous events are not busy", () => {
+  const ics = wrap(`BEGIN:VEVENT
+UID:a
+DTSTART:20261013T090000Z
+DTEND:20261013T100000Z
+SUMMARY:COMP15111/LECTURE2/ <20-27\\, 31>
+LOCATION:Simon_TH B
+DESCRIPTION:Event type: LECTURE\\nDescription: Fundamentals of Computer Arch
+ itecture\\nLocation: Simon_TH B\\nUnit Code: COMP15111\t\\nWeeks: 8-12\t\\n
+END:VEVENT
+BEGIN:VEVENT
+UID:b
+DTSTART:20261013T110000Z
+DTEND:20261013T120000Z
+SUMMARY:COMP22111/LECTURE/
+END:VEVENT
+BEGIN:VEVENT
+UID:c
+DTSTART:20261013T130000Z
+DTEND:20261013T140000Z
+SUMMARY:COMP26020/VIDEO/
+DESCRIPTION:Event type: ASYNCHRONOUS\\nDescription: Recorded content
+END:VEVENT`);
+  const from = new Date("2026-10-12T00:00:00Z");
+  const to = new Date("2026-10-19T00:00:00Z");
+  const [a, b, ...rest] = occurrencesBetween(parseFeed(ics), from, to).map(({ start, end, ...d }) => d);
+  assert.deepEqual(a, { title: "Fundamentals of Computer Architecture", kind: "Lecture", code: "COMP15111", location: "Simon TH B" });
+  assert.deepEqual(b, { title: "COMP22111/LECTURE/", kind: "", code: "COMP22111", location: "" });
+  assert.equal(rest.length, 0);
+});
+
 test("rejects text that is not a calendar", () => {
   assert.throws(() => parseFeed("<html>nope</html>"));
 });

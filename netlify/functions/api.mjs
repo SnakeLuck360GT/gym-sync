@@ -50,8 +50,8 @@ async function week(group, monday) {
     group.members.map(async (member) => {
       try {
         const events = occurrencesBetween(await loadFeed(member.url), from, to)
-          .flatMap(({ start, end, title, location }) =>
-            toDayPieces(start, end, monday, sunday).map((piece) => ({ ...piece, title, location })),
+          .flatMap(({ start, end, ...details }) =>
+            toDayPieces(start, end, monday, sunday).map((piece) => ({ ...piece, ...details })),
           )
           .sort((a, b) => a.day.localeCompare(b.day) || a.start - b.start);
         return { ...publicMember(member), events };
