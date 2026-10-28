@@ -139,3 +139,26 @@ END:VEVENT`);
 test("rejects text that is not a calendar", () => {
   assert.throws(() => parseFeed("<html>nope</html>"));
 });
+
+test("room bookings don't count as busy time", () => {
+  const ics = wrap(`BEGIN:VEVENT
+UID:a
+DTSTART:20261013T090000Z
+DTEND:20261013T100000Z
+SUMMARY:COMP15111/LECTURE/
+DESCRIPTION:Event type: LECTURE\\nDescription: Computer Architecture
+END:VEVENT
+BEGIN:VEVENT
+UID:b
+DTSTART:20261013T110000Z
+DTEND:20261013T130000Z
+SUMMARY:Group project
+LOCATION:Nancy Rothwell_3A.085 M&T
+DESCRIPTION:Event type: Booking_Accepted\\nReference: RB-123\\nStatus: Accepted
+END:VEVENT`);
+  const kept = occurrencesBetween(parseFeed(ics), new Date("2026-10-13T00:00:00Z"), new Date("2026-10-14T00:00:00Z"));
+  assert.deepEqual(
+    kept.map((e) => e.title),
+    ["Computer Architecture"],
+  );
+});
